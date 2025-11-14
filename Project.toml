@@ -1,7 +1,7 @@
 name = "T4ATCIAlgorithms"
 uuid = "afea4b4e-08e0-4d7c-9da1-dbc7777ac29f"
-authors = ["Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors"]
 version = "0.5.0"
+authors = ["Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors"]
 
 [deps]
 Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
@@ -18,6 +18,7 @@ EllipsisNotation = "1"
 OrderedCollections = "1"
 T4AQuantics = "0.5"
 T4ATensorCI = "0.10"
+TensorCrossInterpolation = "0.9"
 julia = "1.10"
 
 [extras]
