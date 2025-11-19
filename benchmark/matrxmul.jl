@@ -1,5 +1,5 @@
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 using BenchmarkTools
 using Random
 

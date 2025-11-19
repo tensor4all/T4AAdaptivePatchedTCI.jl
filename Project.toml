@@ -1,5 +1,5 @@
-name = "T4ATCIAlgorithms"
-uuid = "afea4b4e-08e0-4d7c-9da1-dbc7777ac29f"
+name = "T4AAdaptivePatchedTCI"
+uuid = "36ff05ac-192f-4444-92c7-2a2992a7023b"
 authors = ["Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors"]
 version = "0.5.0"
 

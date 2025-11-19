@@ -1,8 +1,7 @@
-module T4ATCIAlgorithms
+module T4AAdaptivePatchedTCI
 
 import T4ATensorCI as TCI
-import T4ATensorCI:
-    TensorTrain, evaluate, TTCache, MultiIndex, LocalIndex, TensorCI2
+import T4ATensorCI: TensorTrain, evaluate, TTCache, MultiIndex, LocalIndex, TensorCI2
 
 using ITensors
 using T4AQuantics

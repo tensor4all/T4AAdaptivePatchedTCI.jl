@@ -1,6 +1,6 @@
 using Test
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 
 @testset "BlockStructure" begin
     @testset "constructor" begin

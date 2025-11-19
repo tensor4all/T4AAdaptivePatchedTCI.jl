@@ -1,6 +1,6 @@
 import QuanticsGrids as QG
 using T4ATensorCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 using HubbardAtoms
 using SparseIR
 using Quantics

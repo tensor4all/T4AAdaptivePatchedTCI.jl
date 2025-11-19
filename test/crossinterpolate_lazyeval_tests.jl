@@ -4,7 +4,7 @@ using Random
 
 @everywhere using T4ATensorCI
 @everywhere import T4ATensorCI as TCI
-@everywhere import T4ATCIAlgorithms as TCIA
+@everywhere import T4AAdaptivePatchedTCI as TCIA
 @everywhere import QuanticsGrids:
     DiscretizedGrid, quantics_to_origcoord, origcoord_to_quantics
 @everywhere import QuanticsGrids as QG

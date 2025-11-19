@@ -2,7 +2,7 @@ using ITensors
 using Test
 using Random
 using T4AITensorCompat: random_mps, random_mpo, MPO
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 
 function _test_projection(obj::TCIA.ProjectableEvaluator, prj)
     pobj = TCIA.project(obj, prj)

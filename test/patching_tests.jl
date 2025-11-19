@@ -3,7 +3,7 @@ using Random
 
 using T4ATensorCI
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 
 @testset "patching" begin
     @testset "createpath" begin

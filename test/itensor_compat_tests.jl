@@ -34,5 +34,3 @@ using T4AITensorCompat
         @test all(length(T4AITensorCompat.siteinds(C)[n]) == 2 for n in 1:N)
     end
 end
-
-

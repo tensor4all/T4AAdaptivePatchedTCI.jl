@@ -1,8 +1,9 @@
 using Test
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 
-import T4ATCIAlgorithms: Projector, project, ProjTensorTrain, LazyMatrixMul, makeprojectable
+import T4AAdaptivePatchedTCI:
+    Projector, project, ProjTensorTrain, LazyMatrixMul, makeprojectable
 
 @testset "mul" begin
     @testset "lazymatmul" begin

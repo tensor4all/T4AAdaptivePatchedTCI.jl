@@ -1,7 +1,7 @@
 using Distributed
 
-using T4ATCIAlgorithms
-import T4ATCIAlgorithms as TCIA
+using T4AAdaptivePatchedTCI
+import T4AAdaptivePatchedTCI as TCIA
 using Random
 using Test
 

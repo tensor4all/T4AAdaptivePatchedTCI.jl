@@ -6,7 +6,7 @@ addprocs(max(0, MAX_WORKERS - nworkers()))
 
 @everywhere begin
     import T4ATensorCI as TCI
-    import T4ATCIAlgorithms as TCIA
+    import T4AAdaptivePatchedTCI as TCIA
 
     function workerfunc(n)
         if n > 0

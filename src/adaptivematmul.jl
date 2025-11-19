@@ -45,7 +45,9 @@ function _performmul!(
     L = length(pordering)
     i = 1
     while true
-        println("[DEBUG] _performmul! iteration $i, number of nodes: ", length(all_nodes(root)))
+        println(
+            "[DEBUG] _performmul! iteration $i, number of nodes: ", length(all_nodes(root))
+        )
         updated = false
         for node in all_nodes(root)
             for v in node.value

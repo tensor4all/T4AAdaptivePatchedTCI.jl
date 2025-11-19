@@ -4,11 +4,11 @@ using Random
 import QuanticsGrids as QG
 using T4ATensorCI
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 using HubbardAtoms
 using SparseIR
 
-import T4ATCIAlgorithms:
+import T4AAdaptivePatchedTCI:
     create_node,
     add!,
     find_node,
