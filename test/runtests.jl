@@ -30,10 +30,10 @@ include("tree_tests.jl")
 # Include ITensor tests if T4AITensorCompat and ITensors are available
 # Extension module will be automatically loaded when both are available
 #try
-    using T4AITensorCompat
-    using ITensors
-    include("_util.jl")
-    include("itensor_tests.jl")
+using T4AITensorCompat
+using ITensors
+include("_util.jl")
+include("itensor_tests.jl")
 #catch e
-    #@warn "T4AITensorCompat or ITensors not available, skipping ITensor tests" exception=(e, catch_backtrace())
+#@warn "T4AITensorCompat or ITensors not available, skipping ITensor tests" exception=(e, catch_backtrace())
 ##end

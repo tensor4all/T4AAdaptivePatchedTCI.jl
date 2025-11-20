@@ -27,12 +27,13 @@ function _convert_TCI_TensorTrain_to_ITensorTensorTrain(
     tt_tci::TCI.TensorTrain{T,3}, sites::AbstractVector{<:AbstractVector}, ::Type{T}
 ) where {T}
     N = length(tt_tci)
-    length(sites) == N || error("Length mismatch: sites ($(length(sites))) != TensorTrain ($N)")
-    
+    length(sites) == N ||
+        error("Length mismatch: sites ($(length(sites))) != TensorTrain ($N)")
+
     # Create link indices
     linkdims = TCI.linkdims(tt_tci)
     links = [Index(ld, "Link,l=$l") for (l, ld) in enumerate(linkdims)]
-    
+
     # Convert each tensor core to ITensor
     tensors = ITensor[]
     for n in 1:N
@@ -45,11 +46,11 @@ function _convert_TCI_TensorTrain_to_ITensorTensorTrain(
             tensor = ITensor(core, links[end], sites[n]...)
         else
             # Middle tensors: (link[n-1], physical..., link[n])
-            tensor = ITensor(core, links[n-1], sites[n]..., links[n])
+            tensor = ITensor(core, links[n - 1], sites[n]..., links[n])
         end
         push!(tensors, tensor)
     end
-    
+
     return ITensorTensorTrain(tensors)
 end
 
@@ -103,7 +104,7 @@ function _convert_ITensorTensorTrain_to_TCI_TensorTrain(
     sites = siteinds(tt_itensor)
     tensors = Array{T,3}[]
     links = linkinds(tt_itensor)
-    
+
     for (n, tensor) in enumerate(tt_itensor)
         site_inds = sites[n]
         # Convert ITensor to array
@@ -116,12 +117,12 @@ function _convert_ITensorTensorTrain_to_TCI_TensorTrain(
             arr = Array(tensor, inds_list...)
             push!(tensors, reshape(arr, first(size(arr)), :, 1))
         else
-            inds_list = vcat([links[n-1]], site_inds, [links[n]])
+            inds_list = vcat([links[n - 1]], site_inds, [links[n]])
             arr = Array(tensor, inds_list...)
             push!(tensors, reshape(arr, first(size(arr)), :, last(size(arr))))
         end
     end
-    
+
     return TCI.TensorTrain{T,3}(tensors)
 end
 

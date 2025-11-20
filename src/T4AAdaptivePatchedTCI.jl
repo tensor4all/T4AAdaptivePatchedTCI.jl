@@ -3,7 +3,7 @@ module T4AAdaptivePatchedTCI
 import T4ATensorCI as TCI
 import T4ATensorCI: TensorTrain, evaluate, TTCache, MultiIndex, LocalIndex, TensorCI2
 import T4APartitionedMPSs: SubDomainMPS, PartitionedMPS, Projector as PartitionedProjector
-import T4APartitionedMPSs
+using T4APartitionedMPSs: T4APartitionedMPSs
 
 using T4AQuantics
 
@@ -27,4 +27,3 @@ include("patching.jl")
 include("crossinterpolate.jl")
 
 end
-

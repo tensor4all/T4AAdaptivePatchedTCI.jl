@@ -31,4 +31,3 @@ function _test_projection(obj::TCIA.ProjectableEvaluator, prj)
     #indexset3_li = [1, 1, 1, 2]
     #@test pobj(indexset3) == pobj(indexset3_li)
 end
-

@@ -1,7 +1,8 @@
 module T4AAdaptivePatchedTCIITensorExt
 
-import T4AAdaptivePatchedTCI
-import T4AAdaptivePatchedTCI: Projector, ProjTensorTrain, ProjTTContainer, MultiIndex, MMultiIndex, multii
+using T4AAdaptivePatchedTCI: T4AAdaptivePatchedTCI
+import T4AAdaptivePatchedTCI:
+    Projector, ProjTensorTrain, ProjTTContainer, MultiIndex, MMultiIndex, multii
 import T4APartitionedMPSs: SubDomainMPS, PartitionedMPS, Projector as PartitionedProjector
 import T4AITensorCompat: TensorTrain as ITensorTensorTrain, MPS, siteinds, linkinds
 import T4ATensorCI as TCI
@@ -11,4 +12,3 @@ using ITensors
 include(joinpath(@__DIR__, "itensor.jl"))
 
 end
-
