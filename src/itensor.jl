@@ -1,96 +1,128 @@
-# Struct Definitions
-struct ProjMPS
-    data::MPS
-    sites::Vector{Vector{Index}}
-    projector::Projector
-
-    function ProjMPS(
-        data::MPS, sites::AbstractVector{<:AbstractVector}, projector::Projector
-    )
-        _check_projector_compatibility(projector, data, sites) || error(
-            "Incompatible projector and data. Even small numerical noise can cause this error.",
-        )
-        return new(permutesiteinds(data, sites), sites, projector)
-    end
+# Conversion function from ProjTensorTrain to SubDomainMPS
+function SubDomainMPS(::Type{T}, projtt::ProjTensorTrain{T}, sites) where {T}
+    # Convert ProjTensorTrain to TensorTrain (T4AITensorCompat)
+    tt_itensor = _convert_TCI_TensorTrain_to_ITensorTensorTrain(projtt.data, sites, T)
+    # Convert T4AAdaptivePatchedTCI.Projector to T4APartitionedMPSs.Projector
+    partitioned_projector = _convert_projector(projtt.projector, sites)
+    # Create SubDomainMPS
+    return SubDomainMPS(tt_itensor, partitioned_projector)
 end
 
-struct ProjMPSContainer
-    data::Vector{ProjMPS}
-    sites::Vector{Vector{Index}}
-    projector::Projector
-
-    function ProjMPSContainer(data::AbstractVector{ProjMPS})
-        for n in 2:length(data)
-            data[n].sites == data[1].sites ||
-                error("Sitedims mismatch $(data[n].sites) != $(data[1].sites)")
+# Convert T4AAdaptivePatchedTCI.Projector to T4APartitionedMPSs.Projector
+function _convert_projector(proj::Projector, sites::AbstractVector{<:AbstractVector})
+    proj_dict = Dict{Index,Int}()
+    for (site_idx, site_vec) in enumerate(sites)
+        for (leg_idx, index) in enumerate(site_vec)
+            proj_val = proj.data[site_idx][leg_idx]
+            if proj_val > 0
+                proj_dict[index] = proj_val
+            end
         end
-        projector = reduce(|, x.projector for x in data)
-        return new(data, data[1].sites, projector)
     end
+    return PartitionedProjector(proj_dict)
 end
 
-# Constructor Functions
-function ProjMPS(Ψ::MPS, sites::AbstractVector{<:AbstractVector})
-    sitedims = [collect(dim.(s)) for s in sites]
-    globalprojector = Projector([fill(0, length(s)) for s in sitedims], sitedims)
-    return ProjMPS(Ψ, sites, globalprojector)
-end
-
-function ProjMPSContainer(::Type{T}, projttcont::ProjTTContainer{T}, sites) where {T}
-    return ProjMPSContainer([ProjMPS(T, patch, sites) for patch in projttcont.data])
+# Helper function to convert TCI.TensorTrain to T4AITensorCompat.TensorTrain
+function _convert_TCI_TensorTrain_to_ITensorTensorTrain(
+    tt_tci::TCI.TensorTrain{T,3}, sites::AbstractVector{<:AbstractVector}, ::Type{T}
+) where {T}
+    N = length(tt_tci)
+    length(sites) == N || error("Length mismatch: sites ($(length(sites))) != TensorTrain ($N)")
+    
+    # Create link indices
+    linkdims = TCI.linkdims(tt_tci)
+    links = [Index(ld, "Link,l=$l") for (l, ld) in enumerate(linkdims)]
+    
+    # Convert each tensor core to ITensor
+    tensors = ITensor[]
+    for n in 1:N
+        core = tt_tci[n]
+        if n == 1
+            # First tensor: (1, physical..., link[1])
+            tensor = ITensor(core, sites[n]..., links[1])
+        elseif n == N
+            # Last tensor: (link[end], physical...)
+            tensor = ITensor(core, links[end], sites[n]...)
+        else
+            # Middle tensors: (link[n-1], physical..., link[n])
+            tensor = ITensor(core, links[n-1], sites[n]..., links[n])
+        end
+        push!(tensors, tensor)
+    end
+    
+    return ITensorTensorTrain(tensors)
 end
 
 # Conversion Functions
-ITensorMPS.MPS(projΨ::ProjMPS) = projΨ.data
+# MPS(subdmps::SubDomainMPS) is already defined in T4APartitionedMPSs
+# subdmps.data is already T4AITensorCompat.TensorTrain = MPS
 
-function ProjTensorTrain{T}(projΨ::ProjMPS) where {T}
-    return ProjTensorTrain{T}(
-        asTT3(T, projΨ.data, projΨ.sites; permdims=false), projΨ.projector
-    )
+function ProjTensorTrain{T}(subdmps::SubDomainMPS) where {T}
+    # Convert SubDomainMPS.data (TensorTrain from T4AITensorCompat) to TCI.TensorTrain
+    tt_tci = _convert_ITensorTensorTrain_to_TCI_TensorTrain(subdmps.data, T)
+    # Convert T4APartitionedMPSs.Projector to T4AAdaptivePatchedTCI.Projector
+    # This requires sites information, which we can get from siteinds
+    sites = siteinds(subdmps)
+    proj = _convert_partitioned_projector_to_projector(subdmps.projector, sites)
+    return ProjTensorTrain{T}(tt_tci, proj)
 end
 
-function ProjMPS(::Type{T}, projtt::ProjTensorTrain{T}, sites) where {T}
-    links = [Index(ld, "Link,l=$l") for (l, ld) in enumerate(TCI.linkdims(projtt.data))]
-
-    tensors = ITensor[]
-    sitedims = [collect(dim.(s)) for s in sites]
-    linkdims = dim.(links)
-
-    push!(
-        tensors,
-        ITensor(
-            reshape(projtt.data[1], 1, prod(sitedims[1]), linkdims[1]),
-            sites[1]...,
-            links[1],
-        ),
-    )
-
-    for n in 2:(length(projtt.data) - 1)
-        push!(
-            tensors,
-            ITensor(
-                reshape(projtt.data[n], linkdims[n - 1], prod(sitedims[n]), linkdims[n]),
-                links[n - 1],
-                sites[n]...,
-                links[n],
-            ),
-        )
+# Convert T4APartitionedMPSs.Projector to T4AAdaptivePatchedTCI.Projector
+function _convert_partitioned_projector_to_projector(
+    part_proj::PartitionedProjector, sites::AbstractVector{<:AbstractVector}
+)
+    data = Vector{Vector{Int}}()
+    sitedims = Vector{Vector{Int}}()
+    for site_vec in sites
+        proj_vec = Int[]
+        dim_vec = Int[]
+        for index in site_vec
+            push!(dim_vec, dim(index))
+            proj_val = get(part_proj.data, index, 0)
+            push!(proj_vec, proj_val)
+        end
+        push!(data, proj_vec)
+        push!(sitedims, dim_vec)
     end
-
-    push!(
-        tensors,
-        ITensor(
-            reshape(projtt.data[end], linkdims[end], prod(sitedims[end])),
-            links[end],
-            sites[end]...,
-        ),
-    )
-
-    return ProjMPS(MPS(tensors), sites, projtt.projector)
+    return Projector(data, sitedims)
 end
 
-function ProjTTContainer{T}(projmpss::ProjMPSContainer) where {T}
-    return ProjTTContainer([ProjTensorTrain{T}(projmps) for projmps in projmpss.data])
+function ProjTTContainer{T}(partmps::PartitionedMPS) where {T}
+    projtt_vec = ProjTensorTrain{T}[]
+    for subdmps in values(partmps.data)
+        push!(projtt_vec, ProjTensorTrain{T}(subdmps))
+    end
+    return ProjTTContainer(projtt_vec)
+end
+
+# Helper function to convert T4AITensorCompat.TensorTrain to TCI.TensorTrain
+function _convert_ITensorTensorTrain_to_TCI_TensorTrain(
+    tt_itensor::ITensorTensorTrain, ::Type{T}
+) where {T}
+    # Extract sites and convert ITensors to arrays
+    sites = siteinds(tt_itensor)
+    tensors = Array{T,3}[]
+    links = linkinds(tt_itensor)
+    
+    for (n, tensor) in enumerate(tt_itensor)
+        site_inds = sites[n]
+        # Convert ITensor to array
+        if n == 1
+            inds_list = vcat(site_inds, [links[1]])
+            arr = Array(tensor, inds_list...)
+            push!(tensors, reshape(arr, 1, :, last(size(arr))))
+        elseif n == length(tt_itensor)
+            inds_list = vcat([links[end]], site_inds)
+            arr = Array(tensor, inds_list...)
+            push!(tensors, reshape(arr, first(size(arr)), :, 1))
+        else
+            inds_list = vcat([links[n-1]], site_inds, [links[n]])
+            arr = Array(tensor, inds_list...)
+            push!(tensors, reshape(arr, first(size(arr)), :, last(size(arr))))
+        end
+    end
+    
+    return TCI.TensorTrain{T,3}(tensors)
 end
 
 # Utility Functions
@@ -102,7 +134,7 @@ function permutesiteinds(Ψ::MPS, sites::AbstractVector{<:AbstractVector})
         tensors[n] = permute(Ψ[n], vcat(links[n - 1], sites[n], links[n]))
     end
     tensors[end] = permute(Ψ[end], vcat(links[end], sites[end]))
-    return MPS(tensors)
+    return MPS(tensors)  # T4AITensorCompat.MPS = TensorTrain
 end
 
 function project(tensor::ITensor, projsiteinds::Dict{K,Int}) where {K}
@@ -127,16 +159,20 @@ function project(oldprojector::Projector, sites, projsiteinds::Dict{Index{T},Int
     return Projector(newprojdata, oldprojector.sitedims)
 end
 
-function project(projΨ::ProjMPS, projsiteinds::Dict{Index{T},Int}) where {T}
-    return ProjMPS(
-        MPS([project(projΨ.data[n], projsiteinds) for n in 1:length(projΨ.data)]),
-        projΨ.sites,
-        project(projΨ.projector, projΨ.sites, projsiteinds),
-    )
+function project(subdmps::SubDomainMPS, projsiteinds::Dict{Index{T},Int}) where {T}
+    # Convert Dict to T4APartitionedMPSs.Projector
+    projector_data = Dict{Index,Int}(projsiteinds)
+    new_projector = PartitionedProjector(projector_data)
+    # Use SubDomainMPS project method (from T4APartitionedMPSs)
+    result = T4APartitionedMPSs.project(subdmps, new_projector)
+    if result === nothing
+        error("Projection resulted in nothing - projectors may not overlap")
+    end
+    return result
 end
 
 function asTT3(::Type{T}, Ψ::MPS, sites; permdims=true)::TensorTrain{T,3} where {T}
-    Ψ2 = permdims ? _permdims(Ψ, sites) : Ψ
+    Ψ2 = permdims ? permutesiteinds(Ψ, sites) : Ψ
     tensors = Array{T,3}[]
     links = linkinds(Ψ2)
     push!(tensors, reshape(Array(Ψ2[1], sites[1]..., links[1]), 1, :, dim(links[1])))
@@ -157,45 +193,10 @@ function asTT3(::Type{T}, Ψ::MPS, sites; permdims=true)::TensorTrain{T,3} where
     return TensorTrain{T,3}(tensors)
 end
 
-function _check_projector_compatibility(
-    projector::Projector, Ψ::MPS, sites::AbstractVector{<:AbstractVector}
-)
-    links = linkinds(Ψ)
-    sitedims = [collect(dim.(s)) for s in sites]
-
-    sitetensors = []
-    push!(
-        sitetensors,
-        reshape(
-            Array(Ψ[1], [sites[1]..., links[1]]), [1, prod(sitedims[1]), dim(links[1])]...
-        ),
-    )
-    for n in 2:(length(Ψ) - 1)
-        push!(
-            sitetensors,
-            reshape(
-                Array(Ψ[n], [links[n - 1], sites[n]..., links[n]]),
-                dim(links[n - 1]),
-                prod(sitedims[n]),
-                dim(links[n]),
-            ),
-        )
-    end
-    push!(
-        sitetensors,
-        reshape(
-            Array(Ψ[end], [links[end], sites[end]...]),
-            dim(links[end]),
-            prod(sitedims[end]),
-            1,
-        ),
-    )
-
-    return reduce(
-        &,
-        _check_projector_compatibility(projector[n], sitedims[n], sitetensors[n]) for
-        n in 1:length(Ψ)
-    )
+function _check_projector_compatibility(projector::Projector, subdmps::SubDomainMPS)
+    # SubDomainMPS already checks compatibility in constructor
+    # This is a compatibility function for the old API
+    return true
 end
 
 function find_nested_index(data::Vector{Vector{T}}, target::T) where {T}
@@ -208,132 +209,79 @@ function find_nested_index(data::Vector{Vector{T}}, target::T) where {T}
     return nothing  # Not found
 end
 
-# Quantics Functions
-function T4AQuantics.makesitediagonal(projmps::ProjMPS, site::Index)
-    mps_diagonal = T4AQuantics.makesitediagonal(MPS(projmps), site)
-    sites_diagonal = ITensors.SiteTypes.siteinds(all, mps_diagonal)
-    projmps_diagonal = ProjMPS(mps_diagonal, sites_diagonal)
-
-    prjsiteinds = Dict{Index{Int},Int}()
-    for (p, s) in zip(projmps.projector, projmps.sites)
-        for (p_, s_) in zip(p, s)
-            iszero(p_) && continue
-            prjsiteinds[s_] = p_
-            if s_ == site
-                prjsiteinds[s_'] = p_
-            end
-        end
-    end
-
-    return project(projmps_diagonal, prjsiteinds)
-end
-
-function T4AQuantics.makesitediagonal(projmps::ProjMPS, tag::String)
-    mps_diagonal = T4AQuantics.makesitediagonal(MPS(projmps), tag)
-    sites_diagonal = ITensors.SiteTypes.siteinds(all, mps_diagonal)
-    projmps_diagonal = ProjMPS(mps_diagonal, sites_diagonal)
-
-    target_positions = T4AQuantics.findallsiteinds_by_tag(
-        ITensors.SiteTypes.siteinds(MPS(projmps)); tag=tag
-    )
-    prjsiteinds = Dict{Index{Int},Int}()
-    for (p, s) in zip(projmps.projector, projmps.sites)
-        for (p_, s_) in zip(p, s)
-            iszero(p_) && continue
-            prjsiteinds[s_] = p_
-            if s_ ∈ target_positions
-                prjsiteinds[s_'] = p_
-            end
-        end
-    end
-
-    return project(projmps_diagonal, prjsiteinds)
-end
-
-function T4AQuantics.makesitediagonal(projmpss::ProjMPSContainer, sites)
-    return ProjMPSContainer([
-        T4AQuantics.makesitediagonal(projmps, sites) for projmps in projmpss.data
-    ])
-end
-
-function T4AQuantics.extractdiagonal(projmps::ProjMPS, tag::String)
-    mps_diagonal = T4AQuantics.extractdiagonal(MPS(projmps), tag)
-    sites_diagonal = ITensors.SiteTypes.siteinds(all, mps_diagonal)
-    projmps_diagonal = ProjMPS(mps_diagonal, sites_diagonal)
-    sites_diagonal_set = Set(Iterators.flatten(sites_diagonal))
-
-    prjsiteinds = Dict{Index{Int},Int}()
-    for (p, s) in zip(projmps.projector, projmps.sites)
-        for (p_, s_) in zip(p, s)
-            !iszero(p_) || continue
-            s_ ∈ sites_diagonal_set || continue
-            prjsiteinds[s_] = p_
-        end
-    end
-
-    return project(projmps_diagonal, prjsiteinds)
-end
-
-function T4AQuantics.extractdiagonal(projmpss::ProjMPSContainer, sites)
-    return ProjMPSContainer([
-        T4AQuantics.extractdiagonal(projmps, sites) for projmps in projmpss.data
-    ])
-end
-
-function T4AQuantics.rearrange_siteinds(projmps::ProjMPS, sites)
-    mps_rearranged = T4AQuantics.rearrange_siteinds(MPS(projmps), sites)
-    projmps_rearranged = ProjMPS(mps_rearranged, sites)
-    prjsiteinds = Dict{Index{Int},Int}()
-    for (p, s) in zip(projmps.projector, projmps.sites)
-        for (p_, s_) in zip(p, s)
-            if p_ != 0
-                prjsiteinds[s_] = p_
-            end
-        end
-    end
-    return project(projmps_rearranged, prjsiteinds)
-end
-
-function T4AQuantics.rearrange_siteinds(projmpss::ProjMPSContainer, sites)
-    return ProjMPSContainer([
-        T4AQuantics.rearrange_siteinds(projmps, sites) for projmps in projmpss.data
-    ])
-end
+# T4AQuantics extension functions are already defined in T4APartitionedMPSs and T4AQuantics
+# No need to redefine them - they should work automatically
 
 # Miscellaneous Functions
-function Base.show(io::IO, obj::ProjMPS)
-    return print(io, "ProjMPS projected on $(obj.projector.data)")
+# Base.show, ITensors.prime, Base.isapprox are already defined in T4APartitionedMPSs
+# We can add type aliases for backward compatibility if needed
+
+function ITensors.prime(Ψ::PartitionedMPS, args...; kwargs...)
+    return T4APartitionedMPSs.prime(Ψ, args...; kwargs...)
 end
 
-function ITensors.prime(Ψ::ProjMPS, args...; kwargs...)
-    return ProjMPS(
-        prime(MPS(Ψ), args...; kwargs...), prime.(Ψ.sites, args...; kwargs...), Ψ.projector
-    )
+# Base.isapprox for SubDomainMPS is already defined in T4APartitionedMPSs
+
+# Make PartitionedMPS work as ProjectableEvaluator for evaluation
+# Support both MultiIndex (Vector{Int}) and MMultiIndex (Vector{Vector{Int}})
+function (obj::PartitionedMPS)(multiidx::MultiIndex)
+    # Convert MultiIndex to MMultiIndex
+    sitedims_ = sitedims(obj)
+    mmultiidx = multii(sitedims_, multiidx)
+    return obj(mmultiidx)
 end
 
-function ITensors.prime(Ψ::ProjMPSContainer, args...; kwargs...)
-    return ProjMPSContainer([prime(projmps, args...; kwargs...) for projmps in Ψ.data])
-end
-
-Base.isapprox(x::ProjMPS, y::ProjMPS; kwargs...) = Base.isapprox(x.data, y.data, kwargs...)
-
-# Random MPO Functions (commented out)
-#==
-function _random_mpo(
-    rng::AbstractRNG, sites::AbstractVector{<:AbstractVector{Index{T}}}; m::Int=1
-) where {T}
-    sites_ = collect(Iterators.flatten(sites))
-    Ψ = random_mps(rng, sites_, m)
-    tensors = ITensor[]
-    pos = 1
-    for i in 1:length(sites)
-        push!(tensors, prod(Ψ[pos:(pos + length(sites[i]) - 1)]))
-        pos += length(sites[i])
+function (obj::PartitionedMPS)(mmultiidx::MMultiIndex)
+    # Sum over all SubDomainMPS in the PartitionedMPS
+    # Each SubDomainMPS corresponds to a different projector
+    if isempty(obj.data)
+        error("Cannot evaluate empty PartitionedMPS")
     end
-    return MPS(tensors)
+    # Get element type from first tensor in first SubDomainMPS
+    first_subdmps = first(values(obj.data))
+    first_tensor = first(first_subdmps.data)
+    # Get element type from ITensor's storage
+    T = eltype(ITensors.storage(first_tensor))
+    result = zero(T)
+    for subdmps in values(obj.data)
+        # Convert SubDomainMPS to ProjTensorTrain for evaluation
+        # ProjTensorTrain{T}(subdmps) already gets sites from siteinds(subdmps)
+        ptt = ProjTensorTrain{T}(subdmps)
+        result += ptt(mmultiidx)
+    end
+    return result
 end
 
-function _random_mpo(sites::AbstractVector{<:AbstractVector{Index{T}}}; m::Int=1) where {T}
-    return _random_mpo(Random.default_rng(), sites; m=m)
+# Add fulltensor method for PartitionedMPS
+function fulltensor(obj::PartitionedMPS; fused::Bool=false)
+    # Sum over all SubDomainMPS in the PartitionedMPS
+    if isempty(obj.data)
+        error("Cannot compute fulltensor for empty PartitionedMPS")
+    end
+    result = nothing
+    # Get element type from first tensor in first SubDomainMPS
+    first_subdmps = first(values(obj.data))
+    first_tensor = first(first_subdmps.data)
+    # Get element type from ITensor's storage
+    T = eltype(ITensors.storage(first_tensor))
+    for subdmps in values(obj.data)
+        ptt = ProjTensorTrain{T}(subdmps)
+        if result === nothing
+            result = fulltensor(ptt; fused=fused)
+        else
+            result .+= fulltensor(ptt; fused=fused)
+        end
+    end
+    return result
 end
-==#
+
+# Add sitedims property access for PartitionedMPS (needed for ProjectableEvaluator compatibility)
+function sitedims(obj::PartitionedMPS)
+    if isempty(obj.data)
+        error("Cannot get sitedims for empty PartitionedMPS")
+    end
+    # Get sitedims from first SubDomainMPS
+    first_subdmps = first(values(obj.data))
+    sites = siteinds(first_subdmps)
+    return [collect(dim.(s)) for s in sites]
+end

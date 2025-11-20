@@ -329,12 +329,30 @@ end
 
 function adaptiveinterpolate(
     creator::TCI2PatchCreator{T}, pordering::PatchOrdering; verbosity=0
-)::ProjTTContainer{T} where {T}
+)::PartitionedMPS where {T}
     queue = TaskQueue{TCI2PatchCreator{T},ProjTensorTrain{T}}([creator])
     results = loop(
         queue, x -> __taskfunc(x, pordering; verbosity=verbosity); verbosity=verbosity
     )
-    return ProjTTContainer(results)
+    # Convert ProjTensorTrain vector to SubDomainMPS vector
+    # Generate sites from sitedims
+    sites = _sitedims_to_sites(creator.f.sitedims)
+    subdmps_vec = SubDomainMPS[]
+    for projtt in results
+        subdmps = SubDomainMPS(T, projtt, sites)
+        push!(subdmps_vec, subdmps)
+    end
+    return PartitionedMPS(subdmps_vec)
+end
+
+# Helper function to generate sites (Index vectors) from sitedims
+function _sitedims_to_sites(sitedims::Vector{Vector{Int}})
+    sites = Vector{Vector{Index}}()
+    for (n, dims) in enumerate(sitedims)
+        site_inds = [Index(d, "Site,n=$n,leg=$i") for (i, d) in enumerate(dims)]
+        push!(sites, site_inds)
+    end
+    return sites
 end
 
 function adaptiveinterpolate(
@@ -345,7 +363,7 @@ function adaptiveinterpolate(
     tolerance=1e-8,
     initialpivots=MultiIndex[], # Make it to Vector{MMultiIndex}?
     recyclepivots=false,
-)::ProjTTContainer{T} where {T}
+)::PartitionedMPS where {T}
     creator = TCI2PatchCreator(
         T,
         f,
@@ -357,6 +375,5 @@ function adaptiveinterpolate(
         initialpivots=initialpivots,
         recyclepivots=recyclepivots,
     )
-    tmp = adaptiveinterpolate(creator, pordering; verbosity)
-    return reshape(tmp, f.sitedims)
+    return adaptiveinterpolate(creator, pordering; verbosity)
 end

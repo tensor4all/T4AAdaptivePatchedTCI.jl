@@ -1,21 +1,24 @@
 using Test
 import T4ATensorCI as TCI
-import TCIAlgorithms as TCIA
-using Quantics
+import T4AAdaptivePatchedTCI as TCIA
+using T4AQuantics
+import T4APartitionedMPSs: siteinds, SubDomainMPS
+import T4AITensorCompat: MPS
 
-import TCIAlgorithms: Projector, project, ProjTensorTrain, LazyMatrixMul, makeprojectable
+import T4AAdaptivePatchedTCI: Projector, project, ProjTensorTrain, makeprojectable
 
 using ITensors
-using ITensorMPS
+
+include("_util.jl")
 
 @testset "itensor" begin
-    @testset "ProjMPS" begin
+    @testset "SubDomainMPS" begin
         N = 3
         sitesx = [Index(2, "x=$n") for n in 1:N]
         sitesy = [Index(2, "y=$n") for n in 1:N]
         sites = collect(collect.(zip(sitesx, sitesy)))
-        Ψ = MPS(collect(_random_mpo(sites)))
-        prjΨ = TCIA.ProjMPS(Ψ, sites)
+        Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
+        prjΨ = SubDomainMPS(Ψ)
 
         prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
         prjΨ2 = project(prjΨ, Dict(sitesx[1] => 2))
@@ -31,14 +34,14 @@ using ITensorMPS
         sitesy = [Index(2, "y=$n") for n in 1:N]
         sites = collect(collect.(zip(sitesx, sitesy)))
         sitedims = [dim.(s) for s in sites]
-        Ψ = MPS(collect(_random_mpo(sites)))
-        prjΨ = TCIA.ProjMPS(Ψ, sites)
+        Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
+        prjΨ = SubDomainMPS(Ψ)
         prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
 
         prjtt1 = TCIA.ProjTensorTrain{Float64}(prjΨ1)
         @test prjtt1.projector == Projector([[1, 0], [0, 0]], sitedims)
 
-        prjΨ1_reconst = TCIA.ProjMPS(Float64, prjtt1, sites)
+        prjΨ1_reconst = SubDomainMPS(Float64, prjtt1, sites)
 
         @test prjΨ1 ≈ prjΨ1_reconst
     end
@@ -50,9 +53,9 @@ using ITensorMPS
         sitesz = [Index(2, "z=$n") for n in 1:N]
         sites = collect(collect.(zip(sitesx, sitesy, sitesz)))
 
-        Ψ = MPS(collect(_random_mpo(sites)))
+        Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
 
-        prjΨ = TCIA.ProjMPS(Ψ, sites)
+        prjΨ = SubDomainMPS(Ψ)
         prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
 
         sitesxy = collect(collect.(zip(sitesx, sitesy)))
@@ -61,10 +64,10 @@ using ITensorMPS
             push!(sites_rearranged, sitesxy[i])
             push!(sites_rearranged, [sitesz[i]])
         end
-        prjΨ1_rearranged = Quantics.rearrange_siteinds(prjΨ1, sites_rearranged)
+        prjΨ1_rearranged = T4AQuantics.rearrange_siteinds(prjΨ1, sites_rearranged)
 
         @test reduce(*, MPS(prjΨ1)) ≈ reduce(*, MPS(prjΨ1_rearranged))
-        @test prjΨ1_rearranged.sites == sites_rearranged
+        @test siteinds(prjΨ1_rearranged) == sites_rearranged
     end
 
     @testset "makesitediagonal and extractdiagonal" begin
@@ -77,18 +80,18 @@ using ITensorMPS
         sitesz_vec = [[z] for z in sitesz]
         sites = [x for pair in zip(sitesxy_vec, sitesz_vec) for x in pair]
 
-        Ψ = MPS(collect(_random_mpo(sites)))
+        Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
 
-        prjΨ = TCIA.ProjMPS(Ψ, sites)
+        prjΨ = SubDomainMPS(Ψ)
         prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
 
-        prjΨ1_diagonalz = Quantics.makesitediagonal(prjΨ1, "y")
-        sites_diagonalz = Iterators.flatten(prjΨ1_diagonalz.sites)
+        prjΨ1_diagonalz = T4AQuantics.makesitediagonal(prjΨ1, "y")
+        sites_diagonalz = Iterators.flatten(siteinds(prjΨ1_diagonalz))
 
-        psi_diag = prod(prjΨ1_diagonalz.data)
-        psi = prod(prjΨ1.data)
+        psi_diag = prod(MPS(prjΨ1_diagonalz))
+        psi = prod(MPS(prjΨ1))
 
-        @test Quantics.extractdiagonal(prjΨ1_diagonalz, "y") ≈ prjΨ1
+        @test T4AQuantics.extractdiagonal(prjΨ1_diagonalz, "y") ≈ prjΨ1
 
         for indval in eachindval(sites_diagonalz...)
             ind = first.(indval)

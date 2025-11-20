@@ -878,7 +878,7 @@ uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
 version = "7.8.3+2"
 
 [[deps.T4AAdaptivePatchedTCI]]
-deps = ["Distributed", "EllipsisNotation", "ITensors", "LinearAlgebra", "OrderedCollections", "T4AQuantics", "T4ATensorCI", "TensorCrossInterpolation"]
+deps = ["Distributed", "EllipsisNotation", "ITensors", "LinearAlgebra", "OrderedCollections", "QuanticsGrids", "T4AITensorCompat", "T4APartitionedMPSs", "T4AQuantics", "T4ATensorCI", "TensorCrossInterpolation"]
 path = ".."
 uuid = "36ff05ac-192f-4444-92c7-2a2992a7023b"
 version = "0.5.0"
