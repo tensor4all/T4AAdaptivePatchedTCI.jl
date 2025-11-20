@@ -3,8 +3,8 @@ using Random
 
 using T4ATensorCI
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
-import T4ATCIAlgorithms:
+import T4AAdaptivePatchedTCI as TCIA
+import T4AAdaptivePatchedTCI:
     create_node, add_value!, find_node, all_nodes, delete_value!, delete_node!, isleaf
 
 @testset "tree" begin

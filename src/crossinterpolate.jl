@@ -329,12 +329,12 @@ end
 
 function adaptiveinterpolate(
     creator::TCI2PatchCreator{T}, pordering::PatchOrdering; verbosity=0
-)::ProjTTContainer{T} where {T}
+)::Vector{ProjTensorTrain{T}} where {T}
     queue = TaskQueue{TCI2PatchCreator{T},ProjTensorTrain{T}}([creator])
     results = loop(
         queue, x -> __taskfunc(x, pordering; verbosity=verbosity); verbosity=verbosity
     )
-    return ProjTTContainer(results)
+    return collect(results)
 end
 
 function adaptiveinterpolate(
@@ -345,7 +345,7 @@ function adaptiveinterpolate(
     tolerance=1e-8,
     initialpivots=MultiIndex[], # Make it to Vector{MMultiIndex}?
     recyclepivots=false,
-)::ProjTTContainer{T} where {T}
+)::Vector{ProjTensorTrain{T}} where {T}
     creator = TCI2PatchCreator(
         T,
         f,
@@ -357,6 +357,5 @@ function adaptiveinterpolate(
         initialpivots=initialpivots,
         recyclepivots=recyclepivots,
     )
-    tmp = adaptiveinterpolate(creator, pordering; verbosity)
-    return reshape(tmp, f.sitedims)
+    return adaptiveinterpolate(creator, pordering; verbosity)
 end

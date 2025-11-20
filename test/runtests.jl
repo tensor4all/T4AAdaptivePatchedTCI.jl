@@ -1,7 +1,7 @@
 using Distributed
 
-using T4ATCIAlgorithms
-import T4ATCIAlgorithms as TCIA
+using T4AAdaptivePatchedTCI
+import T4AAdaptivePatchedTCI as TCIA
 using Random
 using Test
 
@@ -14,7 +14,7 @@ if nworkers() < MAX_WORKERS
 end
 
 #include("codequality_tests.jl")
-include("_util.jl")
+include("_test_util.jl")
 
 include("util_tests.jl")
 include("projector_tests.jl")
@@ -22,17 +22,18 @@ include("blockstructure_tests.jl")
 include("projectable_evaluator_tests.jl")
 include("projtensortrain_tests.jl")
 include("container_tests.jl")
-include("mul_tests.jl")
 include("distribute_tests.jl")
 include("patching_tests.jl")
 include("crossinterpolate_tests.jl")
 include("tree_tests.jl")
 
-# This tests runs very long time, creating many patches.
-#include("adaptivematmul_tests.jl")
-
-# Following tests did not work with T4AITensorCompat
-#include("itensor_compat_tests.jl")
-#include("bse3d_tests.jl")
-
-#include("crossinterpolate_lazyeval_tests.jl")
+# Include ITensor tests if T4AITensorCompat and ITensors are available
+# Extension module will be automatically loaded when both are available
+#try
+using T4AITensorCompat
+using ITensors
+include("_util.jl")
+include("itensor_tests.jl")
+#catch e
+#@warn "T4AITensorCompat or ITensors not available, skipping ITensor tests" exception=(e, catch_backtrace())
+##end

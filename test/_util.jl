@@ -1,52 +1,20 @@
 using ITensors
-using Test
 using Random
-using T4AITensorCompat: random_mps, random_mpo, MPO
-import T4ATCIAlgorithms as TCIA
-
-function _test_projection(obj::TCIA.ProjectableEvaluator, prj)
-    pobj = TCIA.project(obj, prj)
-
-    # Within the projection
-    pobj_full = TCIA.fulltensor(pobj; fused=false)
-    obj_full = TCIA.fulltensor(obj; fused=false)
-
-    # Projection
-    mask = [x == 0 ? Colon() : x for x in Iterators.flatten(prj.data)]
-    @test pobj_full[mask...] ≈ obj_full[mask...]
-
-    let
-        tmp = deepcopy(pobj_full)
-        tmp[mask...] .= 0.0
-        @test all(tmp .== 0.0)
-    end
-
-    #indexset1 = [[1, 1], [1, 1], [1, 1], [1, 1]]
-    #@test indexset1 <= pobj.projector
-    #@test obj(indexset1) == pobj(indexset1) # exact equality
-
-    # Outside the partition
-    #indexset2 = [[2, 1], [1, 1], [1, 1], [1, 1]]
-    #@test pobj(indexset2) == 0.0
-
-    ## Evaluation at a single linear indexset
-    #indexset3 = [[1, 1], [1, 1], [1, 1], [2, 1]]
-    #indexset3_li = [1, 1, 1, 2]
-    #@test pobj(indexset3) == pobj(indexset3_li)
-end
+using T4AITensorCompat: TensorTrain
+import ITensors: random_itensor
 
 function _random_mpo(
     rng::AbstractRNG, sites::AbstractVector{<:AbstractVector{Index{T}}}; m::Int=1
 ) where {T}
-    sites_ = collect(Iterators.flatten(sites))
-    Ψ = random_mps(rng, sites_; linkdims=m)
-    tensors = ITensor[]
-    pos = 1
-    for i in 1:length(sites)
-        push!(tensors, prod(Ψ[pos:(pos + length(sites[i]) - 1)]))
-        pos += length(sites[i])
+    N = length(sites)
+    links = [Index(m, "Link,n=$n") for n in 1:(N - 1)]
+    tensors = Vector{ITensor}(undef, N)
+    tensors[1] = random_itensor(rng, sites[1]..., links[1])
+    tensors[N] = random_itensor(rng, links[N - 1], sites[N]...)
+    for n in 2:(N - 1)
+        tensors[n] = random_itensor(rng, links[n - 1], sites[n]..., links[n])
     end
-    return MPO(tensors)
+    return TensorTrain(tensors)
 end
 
 function _random_mpo(sites::AbstractVector{<:AbstractVector{Index{T}}}; m::Int=1) where {T}

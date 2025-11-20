@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = T4ATCIAlgorithms
+CurrentModule = T4AAdaptivePatchedTCI
 ```
 
-# T4ATCIAlgorithms
+# T4AAdaptivePatchedTCI
 
-Documentation for [T4ATCIAlgorithms](https://github.com/tensor4all/T4ATCIAlgorithms.jl).
+Documentation for [T4AAdaptivePatchedTCI](https://github.com/tensor4all/T4AAdaptivePatchedTCI.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [T4ATCIAlgorithms]
+Modules = [T4AAdaptivePatchedTCI]
 ```

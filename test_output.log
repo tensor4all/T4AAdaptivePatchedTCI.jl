@@ -1,217 +1,26 @@
-[32m[1m     Testing[22m[39m T4ATCIAlgorithms
-[32m[1m      Status[22m[39m `/private/var/folders/1t/fxgqx0n17z33mplwpw4n1d8r0000gn/T/jl_VCwL1H/Project.toml`
-  [90m[4c88cf16] [39mAqua v0.8.14
-  [90m[da5c29d0] [39mEllipsisNotation v1.8.0
-  [90m[4f3da25b] [39mHubbardAtoms v0.1.0
-  [90m[9136182c] [39mITensors v0.9.14
-  [90m[c3a54625] [39mJET v0.11.0
-  [90m[bac558e1] [39mOrderedCollections v1.8.1
-  [90m[634c7f73] [39mQuanticsGrids v0.6.0
-  [90m[4fe2279e] [39mSparseIR v1.1.4
-[33m⌅[39m [90m[864b39ca] [39mT4AITensorCompat v0.6.0
-  [90m[99202d80] [39mT4AQuantics v0.5.0
-  [90m[afea4b4e] [39mT4ATCIAlgorithms v0.5.0 `~/projects/JuliaUmbrella/T4ATCIAlgorithms.jl`
-  [90m[14428447] [39mT4ATensorCI v0.10.0 `~/projects/JuliaUmbrella/T4ATensorCI.jl`
-  [90m[8ba89e20] [39mDistributed v1.11.0
-  [90m[37e2e46d] [39mLinearAlgebra v1.12.0
-  [90m[9a3f8284] [39mRandom v1.11.0
-  [90m[8dfed614] [39mTest v1.11.0
-[32m[1m      Status[22m[39m `/private/var/folders/1t/fxgqx0n17z33mplwpw4n1d8r0000gn/T/jl_VCwL1H/Manifest.toml`
-  [90m[7d9f7c33] [39mAccessors v0.1.42
-  [90m[79e6a3ab] [39mAdapt v4.4.0
-  [90m[4c88cf16] [39mAqua v0.8.14
-  [90m[dce04be8] [39mArgCheck v2.5.0
-  [90m[4fba245c] [39mArrayInterface v7.22.0
-  [90m[4c555306] [39mArrayLayouts v1.12.0
-  [90m[198e06fe] [39mBangBang v0.4.6
-  [90m[9718e550] [39mBaselet v0.1.1
-  [90m[0e736298] [39mBessels v0.2.8
-  [90m[c3b6d118] [39mBitIntegers v0.3.5
-  [90m[8e7c35d0] [39mBlockArrays v1.9.2
-  [90m[d360d2e6] [39mChainRulesCore v1.26.0
-  [90m[da1fd8a2] [39mCodeTracking v2.0.2
-  [90m[f70d9fcc] [39mCommonWorldInvalidations v1.0.0
-  [90m[34da2185] [39mCompat v4.18.1
-  [90m[807dbc54] [39mCompiler v0.1.1
-  [90m[a33af91c] [39mCompositionsBase v0.1.2
-  [90m[187b0558] [39mConstructionBase v1.6.0
-  [90m[9a962f9c] [39mDataAPI v1.16.0
-  [90m[864edb3b] [39mDataStructures v0.19.3
-  [90m[e2d170a0] [39mDataValueInterfaces v1.0.0
-  [90m[244e2a9f] [39mDefineSingletons v0.1.2
-  [90m[85a47980] [39mDictionaries v0.4.5
-  [90m[ffbed154] [39mDocStringExtensions v0.9.5
-  [90m[da5c29d0] [39mEllipsisNotation v1.8.0
-  [90m[e2ba6199] [39mExprTools v0.1.10
-  [90m[e189563c] [39mExternalDocstrings v0.1.1
-  [90m[1a297f60] [39mFillArrays v1.15.0
-  [90m[41a02a25] [39mFolds v0.2.10
-  [90m[d9f16b24] [39mFunctors v0.5.2
-  [90m[14197337] [39mGenericLinearAlgebra v0.3.19
-  [90m[f0d1745a] [39mHalfIntegers v1.6.0
-  [90m[4f3da25b] [39mHubbardAtoms v0.1.0
-  [90m[0d1a4710] [39mITensorMPS v0.3.24
-  [90m[9136182c] [39mITensors v0.9.14
-  [90m[615f187c] [39mIfElse v0.1.1
-  [90m[313cdc1a] [39mIndexing v1.1.1
-  [90m[22cec73e] [39mInitialValues v0.3.1
-  [90m[842dd82b] [39mInlineStrings v1.4.5
-  [90m[3587e190] [39mInverseFunctions v0.1.17
-  [90m[28f27b66] [39mIsApprox v2.0.0
-  [90m[82899510] [39mIteratorInterfaceExtensions v1.0.0
-  [90m[c3a54625] [39mJET v0.11.0
-  [90m[aa1ae85d] [39mJuliaInterpreter v0.10.7
-  [90m[70703baa] [39mJuliaSyntax v1.0.2
-  [90m[0b1a1467] [39mKrylovKit v0.10.2
-  [90m[6f1432cf] [39mLoweredCodeUtils v3.4.4
-  [90m[1914dd2f] [39mMacroTools v0.5.16
-  [90m[128add7d] [39mMicroCollections v0.2.0
-  [90m[bdf0d083] [39mMultiFloats v2.3.0
-  [90m[23ae76d9] [39mNDTensors v0.4.15
-  [90m[bac558e1] [39mOrderedCollections v1.8.1
-  [90m[65ce6f38] [39mPackageExtensionCompat v1.0.2
-  [90m[aea7be01] [39mPrecompileTools v1.3.3
-  [90m[21216c6a] [39mPreferences v1.5.0
-  [90m[1fd47b50] [39mQuadGK v2.11.2
-  [90m[634c7f73] [39mQuanticsGrids v0.6.0
-  [90m[b11687fd] [39mQuanticsTCI v0.7.2
-  [90m[42d2dcc6] [39mReferenceables v0.1.3
-  [90m[ae029012] [39mRequires v1.3.1
-  [90m[295af30f] [39mRevise v3.12.1
-  [90m[fdea26ae] [39mSIMD v3.7.2
-  [90m[431bcebd] [39mSciMLPublic v1.0.0
-  [90m[d3ce8812] [39mSerializedElementArrays v0.1.0
-  [90m[efcf1570] [39mSetfield v1.1.2
-  [90m[699a6c99] [39mSimpleTraits v0.9.5
-  [90m[4fe2279e] [39mSparseIR v1.1.4
-  [90m[03a91e81] [39mSplitApplyCombine v1.2.3
-  [90m[171d559e] [39mSplittablesBase v0.1.15
-  [90m[aedffcd0] [39mStatic v1.3.1
-  [90m[0d7ed370] [39mStaticArrayInterface v1.8.0
-  [90m[90137ffa] [39mStaticArrays v1.9.15
-  [90m[1e83bf80] [39mStaticArraysCore v1.4.4
-  [90m[5e0ebb24] [39mStrided v2.3.2
-  [90m[4db3bf67] [39mStridedViews v0.4.1
-[33m⌅[39m [90m[864b39ca] [39mT4AITensorCompat v0.6.0
-  [90m[f7a3e09c] [39mT4APartitionedMPSs v0.7.3
-  [90m[99202d80] [39mT4AQuantics v0.5.0
-  [90m[afea4b4e] [39mT4ATCIAlgorithms v0.5.0 `~/projects/JuliaUmbrella/T4ATCIAlgorithms.jl`
-  [90m[14428447] [39mT4ATensorCI v0.10.0 `~/projects/JuliaUmbrella/T4ATensorCI.jl`
-  [90m[3783bdb8] [39mTableTraits v1.0.1
-  [90m[bd369af6] [39mTables v1.12.1
-  [90m[b261b2ec] [39mTensorCrossInterpolation v0.9.18
-  [90m[24d252fe] [39mThreadedScans v0.1.0
-  [90m[a759f4b9] [39mTimerOutputs v0.5.29
-  [90m[28d57a85] [39mTransducers v0.4.85
-  [90m[9d95972d] [39mTupleTools v1.6.0
-  [90m[409d34a3] [39mVectorInterface v0.5.0
-  [90m[bd1ec220] [39mZeros v0.4.0
-  [90m[0dad84c5] [39mArgTools v1.1.2
-  [90m[56f22d72] [39mArtifacts v1.11.0
-  [90m[2a0f44e3] [39mBase64 v1.11.0
-  [90m[ade2ca70] [39mDates v1.11.0
-  [90m[8ba89e20] [39mDistributed v1.11.0
-  [90m[f43a241f] [39mDownloads v1.6.0
-  [90m[7b1f6079] [39mFileWatching v1.11.0
-  [90m[9fa8497b] [39mFuture v1.11.0
-  [90m[b77e0a4c] [39mInteractiveUtils v1.11.0
-  [90m[ac6e5ff7] [39mJuliaSyntaxHighlighting v1.12.0
-  [90m[b27032c2] [39mLibCURL v0.6.4
-  [90m[76f85450] [39mLibGit2 v1.11.0
-  [90m[8f399da3] [39mLibdl v1.11.0
-  [90m[37e2e46d] [39mLinearAlgebra v1.12.0
-  [90m[56ddb016] [39mLogging v1.11.0
-  [90m[d6f4376e] [39mMarkdown v1.11.0
-  [90m[ca575930] [39mNetworkOptions v1.3.0
-  [90m[44cfe95a] [39mPkg v1.12.0
-  [90m[de0858da] [39mPrintf v1.11.0
-  [90m[3fa0cd96] [39mREPL v1.11.0
-  [90m[9a3f8284] [39mRandom v1.11.0
-  [90m[ea8e919c] [39mSHA v0.7.0
-  [90m[9e88b42a] [39mSerialization v1.11.0
-  [90m[6462fe0b] [39mSockets v1.11.0
-  [90m[2f01184e] [39mSparseArrays v1.12.0
-  [90m[f489334b] [39mStyledStrings v1.11.0
-  [90m[fa267f1f] [39mTOML v1.0.3
-  [90m[a4e569a6] [39mTar v1.10.0
-  [90m[8dfed614] [39mTest v1.11.0
-  [90m[cf7118a7] [39mUUIDs v1.11.0
-  [90m[4ec0a83e] [39mUnicode v1.11.0
-  [90m[e66e0078] [39mCompilerSupportLibraries_jll v1.3.0+1
-  [90m[deac9b47] [39mLibCURL_jll v8.11.1+1
-  [90m[e37daf67] [39mLibGit2_jll v1.9.0+0
-  [90m[29816b5a] [39mLibSSH2_jll v1.11.3+1
-  [90m[14a3606d] [39mMozillaCACerts_jll v2025.5.20
-  [90m[4536629a] [39mOpenBLAS_jll v0.3.29+0
-  [90m[458c3c95] [39mOpenSSL_jll v3.5.1+0
-  [90m[bea87d4a] [39mSuiteSparse_jll v7.8.3+2
-  [90m[83775a58] [39mZlib_jll v1.3.1+2
-  [90m[8e850b90] [39mlibblastrampoline_jll v5.15.0+0
-  [90m[8e850ede] [39mnghttp2_jll v1.64.0+1
-  [90m[3f19e933] [39mp7zip_jll v17.5.0+2
-[36m[1m        Info[22m[39m Packages marked with [33m⌅[39m have new versions available but compatibility constraints restrict them from upgrading.
-[32m[1mPrecompiling[22m[39m for configuration --code-coverage=none --color=yes --check-bounds=yes --warn-overwrite=yes --depwarn=yes --inline=yes --startup-file=no --track-allocation=none
-    676.1 ms[32m  ✓ [39m[90mGenericLinearAlgebra[39m
-   1241.4 ms[32m  ✓ [39m[90mBessels[39m
-   1100.5 ms[32m  ✓ [39m[90mTensorCrossInterpolation[39m
-    890.2 ms[32m  ✓ [39m[90mRevise → DistributedExt[39m
-    669.6 ms[32m  ✓ [39m[90mQuanticsTCI[39m
-   4955.5 ms[32m  ✓ [39m[90mStaticArrays[39m
-    714.9 ms[32m  ✓ [39m[90mConstructionBase → ConstructionBaseStaticArraysExt[39m
-    756.3 ms[32m  ✓ [39m[90mStaticArrays → StaticArraysChainRulesCoreExt[39m
-    512.2 ms[32m  ✓ [39m[90mAdapt → AdaptStaticArraysExt[39m
-    601.8 ms[32m  ✓ [39m[90mAccessors → StaticArraysExt[39m
-    559.0 ms[32m  ✓ [39m[90mBangBang → BangBangStaticArraysExt[39m
-    558.6 ms[32m  ✓ [39m[90mStaticArrayInterface → StaticArrayInterfaceStaticArraysExt[39m
-   6973.3 ms[32m  ✓ [39m[90mSIMD[39m
-   7239.4 ms[32m  ✓ [39m[90mIsApprox[39m
-   1128.1 ms[32m  ✓ [39m[90mMultiFloats[39m
-   8840.5 ms[32m  ✓ [39m[90mArrayLayouts[39m
-   1149.9 ms[32m  ✓ [39m[90mArrayLayouts → ArrayLayoutsSparseArraysExt[39m
-   1647.3 ms[32m  ✓ [39m[90mBlockArrays[39m
-   1063.4 ms[32m  ✓ [39m[90mBlockArrays → BlockArraysAdaptExt[39m
-   1306.1 ms[32m  ✓ [39m[90mTransducers → TransducersBlockArraysExt[39m
-   3649.3 ms[32m  ✓ [39m[90mNDTensors[39m
-   4864.1 ms[32m  ✓ [39mITensors
-   1546.6 ms[32m  ✓ [39mITensors → ITensorsVectorInterfaceExt
-   3737.2 ms[32m  ✓ [39m[90mITensorMPS[39m
-  24944.1 ms[32m  ✓ [39mSparseIR
-   2581.8 ms[32m  ✓ [39m[90mITensorMPS → ITensorMPSChainRulesCoreExt[39m
-   2609.3 ms[32m  ✓ [39mT4ATensorCI → TCIITensorConversion
-   2607.8 ms[32m  ✓ [39m[90mTensorCrossInterpolation → TCIITensorConversion[39m
-   1380.8 ms[32m  ✓ [39mHubbardAtoms
-   2237.1 ms[32m  ✓ [39mT4AITensorCompat
-   3029.4 ms[32m  ✓ [39m[90mT4APartitionedMPSs[39m
-   3167.5 ms[32m  ✓ [39mT4AQuantics
-   3212.4 ms[32m  ✓ [39mT4ATCIAlgorithms
-  33 dependencies successfully precompiled in 45 seconds. 122 already precompiled.
-  [33m1[39m dependency had output during precompilation:[33m
-┌ [39mT4AQuantics[33m
-│  [39mWARNING: ignoring conflicting import of SiteTypes.siteinds into T4AQuantics[33m
-└  [39m
-[32m[1m     Testing[22m[39m Running tests...
-[0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1m Time[22m
-Aqua.jl       | [32m   7  [39m[36m    7  [39m[0m17.2s
+[32m[1mPrecompiling[22m[39m packages...
+   2798.8 ms[32m  ✓ [39mT4AAdaptivePatchedTCI
+   2001.9 ms[32m  ✓ [39mT4AAdaptivePatchedTCI → T4AAdaptivePatchedTCIITensorExt
+  2 dependencies successfully precompiled in 5 seconds. 142 already precompiled.
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-Util          | [32m  15  [39m[36m   15  [39m[0m1.3s
+Util          | [32m  15  [39m[36m   15  [39m[0m0.9s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-Projector     | [32m  24  [39m[36m   24  [39m[0m0.8s
+Projector     | [32m  24  [39m[36m   24  [39m[0m0.5s
 [0m[1mTest Summary:  | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
 BlockStructure | [32m   3  [39m[36m    3  [39m[0m0.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-ProjEvaluator | [32m   5  [39m[36m    5  [39m[0m2.8s
+ProjEvaluator | [32m   5  [39m[36m    5  [39m[0m1.9s
 [0m[1mTest Summary:   | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-ProjTensorTrain | [32m  12  [39m[36m   12  [39m[0m6.5s
+ProjTensorTrain | [32m  12  [39m[36m   12  [39m[0m4.4s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-ProjContainer | [32m   7  [39m[36m    7  [39m[0m1.4s
+ProjContainer | [32m   7  [39m[36m    7  [39m[0m1.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-mul           | [32m  13  [39m[36m   13  [39m[0m6.7s
+TaskQueue     | [32m   1  [39m[36m    1  [39m[0m0.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-TaskQueue     | [32m   1  [39m[36m    1  [39m[0m0.3s
-[0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-patching      | [32m  12  [39m[36m   12  [39m[0m0.5s
+patching      | [32m   6  [39m[36m    6  [39m[0m0.1s
 [0m[1mTest Summary:    | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1m Time[22m
-crossinterpolate | [32m  23  [39m[36m   23  [39m[0m30.1s
+crossinterpolate | [32m  23  [39m[36m   23  [39m[0m25.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-tree          | [32m  16  [39m[36m   16  [39m[0m0.5s
-[91m[1mERROR: [22m[39m
+tree          | [32m  16  [39m[36m   16  [39m[0m0.3s
+[33m[1m┌ [22m[39m[33m[1mWarning: [22m[39mT4AITensorCompat not available, skipping ITensor tests
+[33m[1m└ [22m[39m[90m@ Main ~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/runtests.jl:39[39m

@@ -1,8 +1,8 @@
 using Test
 import T4ATensorCI as TCI
-import T4ATCIAlgorithms as TCIA
+import T4AAdaptivePatchedTCI as TCIA
 
-import T4ATCIAlgorithms: Projector
+import T4AAdaptivePatchedTCI: Projector
 
 import QuanticsGrids: DiscretizedGrid, quantics_to_origcoord, origcoord_to_quantics
 import QuanticsGrids as QG
