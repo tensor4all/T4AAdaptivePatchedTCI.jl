@@ -1,144 +1,26 @@
+[32m[1mPrecompiling[22m[39m packages...
+   2798.8 ms[32m  ✓ [39mT4AAdaptivePatchedTCI
+   2001.9 ms[32m  ✓ [39mT4AAdaptivePatchedTCI → T4AAdaptivePatchedTCIITensorExt
+  2 dependencies successfully precompiled in 5 seconds. 142 already precompiled.
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-Util          | [32m  15  [39m[36m   15  [39m[0m1.0s
+Util          | [32m  15  [39m[36m   15  [39m[0m0.9s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-Projector     | [32m  24  [39m[36m   24  [39m[0m0.7s
+Projector     | [32m  24  [39m[36m   24  [39m[0m0.5s
 [0m[1mTest Summary:  | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-BlockStructure | [32m   3  [39m[36m    3  [39m[0m0.1s
+BlockStructure | [32m   3  [39m[36m    3  [39m[0m0.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-ProjEvaluator | [32m   5  [39m[36m    5  [39m[0m2.3s
+ProjEvaluator | [32m   5  [39m[36m    5  [39m[0m1.9s
 [0m[1mTest Summary:   | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-ProjTensorTrain | [32m  12  [39m[36m   12  [39m[0m5.5s
+ProjTensorTrain | [32m  12  [39m[36m   12  [39m[0m4.4s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-ProjContainer | [32m   7  [39m[36m    7  [39m[0m1.3s
+ProjContainer | [32m   7  [39m[36m    7  [39m[0m1.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
 TaskQueue     | [32m   1  [39m[36m    1  [39m[0m0.2s
 [0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
-patching      | [32m   6  [39m[36m    6  [39m[0m0.2s
-2D Guassian: [91m[1mError During Test[22m[39m at [39m[1m/Users/hiroshi/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/crossinterpolate_tests.jl:96[22m
-  Test threw exception
-  Expression: isapprox([obj(QG.origcoord_to_quantics(grid, p)) for p = points], [qf(QG.origcoord_to_quantics(grid, p)) for p = points]; atol = 1.0e-5)
-  MethodError: no method matching (::T4APartitionedMPSs.PartitionedMPS)(::Vector{Int64})
-  The object of type `T4APartitionedMPSs.PartitionedMPS` exists, but no method is defined for this combination of argument types when trying to treat it as a callable object.
-  
-  [0mClosest candidates are:
-  [0m  (::T4APartitionedMPSs.PartitionedMPS)([91m::Vector{Vector{Int64}}[39m)
-  [0m[90m   @[39m [35mT4AAdaptivePatchedTCI[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/src/[39m[90m[4mitensor.jl:226[24m[39m
-  
-  Stacktrace:
-   [1] [0m[1m(::var"#174#175"{T4APartitionedMPSs.PartitionedMPS, DiscretizedGrid{2}})[22m[0m[1m([22m[90mp[39m::[0mTuple[90m{Float64, Float64}[39m[0m[1m)[22m
-  [90m   @[39m [36mMain[39m [90m./[39m[90m[4mnone:-1[24m[39m
-   [2] [0m[1miterate[22m
-  [90m   @[39m [90m./[39m[90m[4mgenerator.jl:48[24m[39m[90m [inlined][39m
-   [3] [0m[1mcollect[22m[0m[1m([22m[90mitr[39m::[0mBase.Generator[90m{Vector{Tuple{Float64, Float64}}, var"#174#175"{T4APartitionedMPSs.PartitionedMPS, DiscretizedGrid{2}}}[39m[0m[1m)[22m
-  [90m   @[39m [90mBase[39m [90m./[39m[90m[4marray.jl:790[24m[39m
-   [4] top-level scope
-  [90m   @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:13[24m[39m
-   [5] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-   [6] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:68[24m[39m[90m [inlined][39m
-   [7] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-   [8] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:96[24m[39m[90m [inlined][39m
-   [9] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:677[24m[39m[90m [inlined][39m
-zerofunction: [91m[1mError During Test[22m[39m at [39m[1m/Users/hiroshi/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/crossinterpolate_tests.jl:122[22m
-  Test threw exception
-  Expression: obj([[q] for q = qidx]) == 0.0
-  DimensionMismatch: cannot convert an 2 dimensional ITensor to an 0-dimensional Array.
-  Stacktrace:
-    [1] [0m[1mArray{Float64, 0}[22m[0m[1m([22m[90mT[39m::[0mITensor, [90mis[39m::[0mTuple[90m{}[39m[0m[1m)[22m
-  [90m    @[39m [32mITensors[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:701[24m[39m
-    [2] [0m[1mArray[22m
-  [90m    @[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:715[24m[39m[90m [inlined][39m
-    [3] ([0m[1mArray{Float64}[22m)[0m[1m([22m::[0mITensor[0m[1m)[22m
-  [90m    @[39m [32mITensors[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:719[24m[39m
-    [4] [0m[1mArray[22m[0m[1m([22m::[0mITensor[0m[1m)[22m
-  [90m    @[39m [32mITensors[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:723[24m[39m
-    [5] [0m[1m(::T4APartitionedMPSs.PartitionedMPS)[22m[0m[1m([22m[90mmmultiidx[39m::[0mVector[90m{Vector{Int64}}[39m[0m[1m)[22m
-  [90m    @[39m [35mT4AAdaptivePatchedTCI[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/src/[39m[90m[4mitensor.jl:235[24m[39m
-    [6] top-level scope
-  [90m    @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:13[24m[39m
-    [7] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-    [8] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:104[24m[39m[90m [inlined][39m
-    [9] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-   [10] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:122[24m[39m[90m [inlined][39m
-   [11] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:677[24m[39m[90m [inlined][39m
-approxtt: [91m[1mError During Test[22m[39m at [39m[1m/Users/hiroshi/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/crossinterpolate_tests.jl:145[22m
-  Test threw exception
-  Expression: vec(TCIA.fulltensor(obj)) ≈ vec(TCIA.fulltensor(ptt))
-  DimensionMismatch: cannot convert an 2 dimensional ITensor to an 0-dimensional Array.
-  Stacktrace:
-    [1] [0m[1mArray{Float64, 0}[22m[0m[1m([22m[90mT[39m::[0mITensor, [90mis[39m::[0mTuple[90m{}[39m[0m[1m)[22m
-  [90m    @[39m [32mITensors[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:701[24m[39m
-    [2] [0m[1mArray[22m
-  [90m    @[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:715[24m[39m[90m [inlined][39m
-    [3] ([0m[1mArray{Float64}[22m)[0m[1m([22m::[0mITensor[0m[1m)[22m
-  [90m    @[39m [32mITensors[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:719[24m[39m
-    [4] [0m[1mArray[22m[0m[1m([22m::[0mITensor[0m[1m)[22m
-  [90m    @[39m [32mITensors[39m [90m~/.julia/packages/ITensors/SOADD/src/[39m[90m[4mitensor.jl:723[24m[39m
-    [5] [0m[1mfulltensor[22m[0m[1m([22m[90mobj[39m::[0mT4APartitionedMPSs.PartitionedMPS; [90mfused[39m::[0mBool[0m[1m)[22m
-  [90m    @[39m [35mT4AAdaptivePatchedTCI[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/src/[39m[90m[4mitensor.jl:256[24m[39m
-    [6] [0m[1mfulltensor[22m[0m[1m([22m[90mobj[39m::[0mT4APartitionedMPSs.PartitionedMPS[0m[1m)[22m
-  [90m    @[39m [35mT4AAdaptivePatchedTCI[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/src/[39m[90m[4mitensor.jl:247[24m[39m
-    [7] top-level scope
-  [90m    @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:13[24m[39m
-    [8] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-    [9] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:126[24m[39m[90m [inlined][39m
-   [10] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-   [11] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:145[24m[39m[90m [inlined][39m
-   [12] [0m[1mmacro expansion[22m
-  [90m    @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:677[24m[39m[90m [inlined][39m
-randompatchorder&2Dgreen: [91m[1mError During Test[22m[39m at [39m[1m/Users/hiroshi/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/crossinterpolate_tests.jl:184[22m
-  Test threw exception
-  Expression: isapprox([obj(QG.origcoord_to_quantics(grid, p)) for p = points], [qf(QG.origcoord_to_quantics(grid, p)) for p = points]; atol = 0.0001)
-  MethodError: no method matching (::T4APartitionedMPSs.PartitionedMPS)(::Vector{Int64})
-  The object of type `T4APartitionedMPSs.PartitionedMPS` exists, but no method is defined for this combination of argument types when trying to treat it as a callable object.
-  
-  [0mClosest candidates are:
-  [0m  (::T4APartitionedMPSs.PartitionedMPS)([91m::Vector{Vector{Int64}}[39m)
-  [0m[90m   @[39m [35mT4AAdaptivePatchedTCI[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/src/[39m[90m[4mitensor.jl:226[24m[39m
-  
-  Stacktrace:
-   [1] [0m[1m(::var"#193#194"{T4APartitionedMPSs.PartitionedMPS, DiscretizedGrid{2}})[22m[0m[1m([22m[90mp[39m::[0mTuple[90m{Float64, Float64}[39m[0m[1m)[22m
-  [90m   @[39m [36mMain[39m [90m./[39m[90m[4mnone:-1[24m[39m
-   [2] [0m[1miterate[22m
-  [90m   @[39m [90m./[39m[90m[4mgenerator.jl:48[24m[39m[90m [inlined][39m
-   [3] [0m[1mcollect[22m[0m[1m([22m[90mitr[39m::[0mBase.Generator[90m{Vector{Tuple{Float64, Float64}}, var"#193#194"{T4APartitionedMPSs.PartitionedMPS, DiscretizedGrid{2}}}[39m[0m[1m)[22m
-  [90m   @[39m [90mBase[39m [90m./[39m[90m[4marray.jl:790[24m[39m
-   [4] top-level scope
-  [90m   @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:13[24m[39m
-   [5] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-   [6] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:149[24m[39m[90m [inlined][39m
-   [7] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:1776[24m[39m[90m [inlined][39m
-   [8] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/[39m[90m[4mcrossinterpolate_tests.jl:184[24m[39m[90m [inlined][39m
-   [9] [0m[1mmacro expansion[22m
-  [90m   @[39m [90m~/.julia/juliaup/julia-1.12.1+0.aarch64.apple.darwin14/share/julia/stdlib/v1.12/Test/src/[39m[90m[4mTest.jl:677[24m[39m[90m [inlined][39m
-[0m[1mTest Summary:                                                  | [22m[32m[1mPass  [22m[39m[91m[1mError  [22m[39m[36m[1mTotal  [22m[39m[0m[1m Time[22m
-crossinterpolate                                               | [32m  19  [39m[91m    4  [39m[36m   23  [39m[0m30.2s
-  _FuncAdapterTCI2Subset                                       | [32m   5  [39m[91m       [39m[36m    5  [39m[0m 0.4s
-  fulllength_leftmmultiidxset and fulllength_rightmmultiidxset | [32m   5  [39m[91m       [39m[36m    5  [39m[0m 0.0s
-  fulllength_leftmmultiidxset (empty set)                      | [32m   1  [39m[91m       [39m[36m    1  [39m[0m 0.0s
-  2D Guassian                                                  | [32m      [39m[91m    1  [39m[36m    1  [39m[0m22.9s
-  zerofunction                                                 | [32m      [39m[91m    1  [39m[36m    1  [39m[0m 0.2s
-  approxtt                                                     | [32m      [39m[91m    1  [39m[36m    1  [39m[0m 1.3s
-  randompatchorder&2Dgreen                                     | [32m      [39m[91m    1  [39m[36m    1  [39m[0m 3.5s
-  recyclepivots                                                | [32m   8  [39m[91m       [39m[36m    8  [39m[0m 1.9s
-RNG of the outermost testset: Xoshiro(0x9a9ba6bb4193fc8e, 0x1f289246869bd05c, 0x42467357c15d6845, 0x3c998f338dc6e877, 0xeba888ae7caad23c)
-[91m[1mERROR: [22m[39mLoadError: [91mSome tests did not pass: 19 passed, 0 failed, 4 errored, 0 broken.[39m
-in expression starting at /Users/hiroshi/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/crossinterpolate_tests.jl:12
-in expression starting at /Users/hiroshi/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/runtests.jl:27
+patching      | [32m   6  [39m[36m    6  [39m[0m0.1s
+[0m[1mTest Summary:    | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1m Time[22m
+crossinterpolate | [32m  23  [39m[36m   23  [39m[0m25.2s
+[0m[1mTest Summary: | [22m[32m[1mPass  [22m[39m[36m[1mTotal  [22m[39m[0m[1mTime[22m
+tree          | [32m  16  [39m[36m   16  [39m[0m0.3s
+[33m[1m┌ [22m[39m[33m[1mWarning: [22m[39mT4AITensorCompat not available, skipping ITensor tests
+[33m[1m└ [22m[39m[90m@ Main ~/projects/JuliaUmbrella/T4AAdaptivePatchedTCI.jl/test/runtests.jl:39[39m

@@ -1,6 +1,7 @@
 using Distributed
 using Test
 using Random
+using LinearAlgebra
 
 @everywhere using T4ATensorCI
 @everywhere import T4ATensorCI as TCI
@@ -89,7 +90,8 @@ using Random
             ntry=10,
         )
 
-        obj = TCIA.adaptiveinterpolate(creator, pordering; verbosity=0)
+        results = TCIA.adaptiveinterpolate(creator, pordering; verbosity=0)
+        obj = TCIA.ProjTTContainer(results)
 
         points = [(rand() * 10 - 5, rand() * 10 - 5) for i in 1:100]
 
@@ -116,7 +118,8 @@ using Random
             Float64, qf, localdims; maxbonddim=10, tolerance=tol, verbosity=0, ntry=10
         )
 
-        obj = TCIA.adaptiveinterpolate(creator, pordering; verbosity=0)
+        results = TCIA.adaptiveinterpolate(creator, pordering; verbosity=0)
+        obj = TCIA.ProjTTContainer(results)
 
         qidx = fill(1, R)
         @test obj([[q] for q in qidx]) == 0.0
@@ -140,7 +143,8 @@ using Random
 
         ptt = TCIA.project(TCIA.ProjTensorTrain(tt), p)
 
-        obj = TCIA.adaptiveinterpolate(ptt; verbosity=0, maxbonddim=5)
+        results = TCIA.adaptiveinterpolate(ptt; verbosity=0, maxbonddim=5)
+        obj = TCIA.ProjTTContainer(results)
 
         @test vec(TCIA.fulltensor(obj)) ≈ vec(TCIA.fulltensor(ptt))
     end
@@ -175,7 +179,8 @@ using Random
             verbosity=0,
             ntry=10,
         )
-        obj = TCIA.adaptiveinterpolate(creator, pordering; verbosity=0)
+        results = TCIA.adaptiveinterpolate(creator, pordering; verbosity=0)
+        obj = TCIA.ProjTTContainer(results)
 
         points = [(rand() * 2 * pi - pi, rand() * 2 * pi - pi) for i in 1:1000]
 

@@ -2,14 +2,14 @@ using Test
 import T4ATensorCI as TCI
 import T4AAdaptivePatchedTCI as TCIA
 using T4AQuantics
-import T4APartitionedMPSs: siteinds, SubDomainMPS
+import T4APartitionedMPSs: siteinds, SubDomainMPS, project as project_subdmps
 import T4AITensorCompat: MPS
 
 import T4AAdaptivePatchedTCI: Projector, project, ProjTensorTrain, makeprojectable
 
 using ITensors
 
-include("_util.jl")
+# _util.jl is already included in runtests.jl
 
 @testset "itensor" begin
     @testset "SubDomainMPS" begin
@@ -20,8 +20,8 @@ include("_util.jl")
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
         prjΨ = SubDomainMPS(Ψ)
 
-        prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
-        prjΨ2 = project(prjΨ, Dict(sitesx[1] => 2))
+        prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
+        prjΨ2 = project_subdmps(prjΨ, Dict(sitesx[1] => 2))
 
         Ψreconst = MPS(prjΨ1) + MPS(prjΨ2)
 
@@ -36,7 +36,7 @@ include("_util.jl")
         sitedims = [dim.(s) for s in sites]
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
         prjΨ = SubDomainMPS(Ψ)
-        prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
+        prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
 
         prjtt1 = TCIA.ProjTensorTrain{Float64}(prjΨ1)
         @test prjtt1.projector == Projector([[1, 0], [0, 0]], sitedims)
@@ -56,7 +56,7 @@ include("_util.jl")
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
 
         prjΨ = SubDomainMPS(Ψ)
-        prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
+        prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
 
         sitesxy = collect(collect.(zip(sitesx, sitesy)))
         sites_rearranged = Vector{Index{Int}}[]
@@ -83,7 +83,7 @@ include("_util.jl")
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
 
         prjΨ = SubDomainMPS(Ψ)
-        prjΨ1 = project(prjΨ, Dict(sitesx[1] => 1))
+        prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
 
         prjΨ1_diagonalz = T4AQuantics.makesitediagonal(prjΨ1, "y")
         sites_diagonalz = Iterators.flatten(siteinds(prjΨ1_diagonalz))
