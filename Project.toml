@@ -23,6 +23,7 @@ T4AAdaptivePatchedTCIITensorExt = ["ITensors", "T4AITensorCompat"]
 
 [compat]
 EllipsisNotation = "1"
+ITensors = "0.9"
 OrderedCollections = "1"
 QuanticsGrids = "0.6.0"
 T4AITensorCompat = "0.6.0"
