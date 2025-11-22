@@ -1,14 +1,14 @@
-# Conversion function from ProjTensorTrain to SubDomainMPS
-function SubDomainMPS(::Type{T}, projtt::ProjTensorTrain{T}, sites) where {T}
+# Conversion function from ProjTensorTrain to SubDomainTT
+function SubDomainTT(::Type{T}, projtt::ProjTensorTrain{T}, sites) where {T}
     # Convert ProjTensorTrain to TensorTrain (T4AITensorCompat)
     tt_itensor = _convert_TCI_TensorTrain_to_ITensorTensorTrain(projtt.data, sites, T)
-    # Convert T4AAdaptivePatchedTCI.Projector to T4APartitionedMPSs.Projector
+    # Convert T4AAdaptivePatchedTCI.Projector to T4APartitionedTT.Projector
     partitioned_projector = _convert_projector(projtt.projector, sites)
-    # Create SubDomainMPS
-    return SubDomainMPS(tt_itensor, partitioned_projector)
+    # Create SubDomainTT
+    return SubDomainTT(tt_itensor, partitioned_projector)
 end
 
-# Convert T4AAdaptivePatchedTCI.Projector to T4APartitionedMPSs.Projector
+# Convert T4AAdaptivePatchedTCI.Projector to T4APartitionedTT.Projector
 function _convert_projector(proj::Projector, sites::AbstractVector{<:AbstractVector})
     proj_dict = Dict{Index,Int}()
     for (site_idx, site_vec) in enumerate(sites)
@@ -55,20 +55,20 @@ function _convert_TCI_TensorTrain_to_ITensorTensorTrain(
 end
 
 # Conversion Functions
-# MPS(subdmps::SubDomainMPS) is already defined in T4APartitionedMPSs
+# MPS(subdmps::SubDomainTT) is already defined in T4APartitionedTT
 # subdmps.data is already T4AITensorCompat.TensorTrain = MPS
 
-function ProjTensorTrain{T}(subdmps::SubDomainMPS) where {T}
-    # Convert SubDomainMPS.data (TensorTrain from T4AITensorCompat) to TCI.TensorTrain
+function ProjTensorTrain{T}(subdmps::SubDomainTT) where {T}
+    # Convert SubDomainTT.data (TensorTrain from T4AITensorCompat) to TCI.TensorTrain
     tt_tci = _convert_ITensorTensorTrain_to_TCI_TensorTrain(subdmps.data, T)
-    # Convert T4APartitionedMPSs.Projector to T4AAdaptivePatchedTCI.Projector
+    # Convert T4APartitionedTT.Projector to T4AAdaptivePatchedTCI.Projector
     # This requires sites information, which we can get from siteinds
     sites = siteinds(subdmps)
     proj = _convert_partitioned_projector_to_projector(subdmps.projector, sites)
     return ProjTensorTrain{T}(tt_tci, proj)
 end
 
-# Convert T4APartitionedMPSs.Projector to T4AAdaptivePatchedTCI.Projector
+# Convert T4APartitionedTT.Projector to T4AAdaptivePatchedTCI.Projector
 function _convert_partitioned_projector_to_projector(
     part_proj::PartitionedProjector, sites::AbstractVector{<:AbstractVector}
 )
@@ -88,7 +88,7 @@ function _convert_partitioned_projector_to_projector(
     return Projector(data, sitedims)
 end
 
-function ProjTTContainer{T}(partmps::PartitionedMPS) where {T}
+function ProjTTContainer{T}(partmps::PartitionedTT) where {T}
     projtt_vec = ProjTensorTrain{T}[]
     for subdmps in values(partmps.data)
         push!(projtt_vec, ProjTensorTrain{T}(subdmps))
@@ -160,12 +160,12 @@ function project(oldprojector::Projector, sites, projsiteinds::Dict{Index{T},Int
     return Projector(newprojdata, oldprojector.sitedims)
 end
 
-function project(subdmps::SubDomainMPS, projsiteinds::Dict{Index{T},Int}) where {T}
-    # Convert Dict to T4APartitionedMPSs.Projector
+function project(subdmps::SubDomainTT, projsiteinds::Dict{Index{T},Int}) where {T}
+    # Convert Dict to T4APartitionedTT.Projector
     projector_data = Dict{Index,Int}(projsiteinds)
     new_projector = PartitionedProjector(projector_data)
-    # Use SubDomainMPS project method (from T4APartitionedMPSs)
-    result = T4APartitionedMPSs.project(subdmps, new_projector)
+    # Use SubDomainTT project method (from T4APartitionedTT)
+    result = T4APartitionedTT.project(subdmps, new_projector)
     if result === nothing
         error("Projection resulted in nothing - projectors may not overlap")
     end
@@ -194,8 +194,8 @@ function asTT3(::Type{T}, Ψ::MPS, sites; permdims=true)::TensorTrain{T,3} where
     return TensorTrain{T,3}(tensors)
 end
 
-function _check_projector_compatibility(projector::Projector, subdmps::SubDomainMPS)
-    # SubDomainMPS already checks compatibility in constructor
+function _check_projector_compatibility(projector::Projector, subdmps::SubDomainTT)
+    # SubDomainTT already checks compatibility in constructor
     # This is a compatibility function for the old API
     return true
 end
@@ -210,42 +210,36 @@ function find_nested_index(data::Vector{Vector{T}}, target::T) where {T}
     return nothing  # Not found
 end
 
-# T4AQuantics extension functions are already defined in T4APartitionedMPSs and T4AQuantics
+# T4AQuantics extension functions are already defined in T4APartitionedTT and T4AQuantics
 # No need to redefine them - they should work automatically
 
 # Miscellaneous Functions
-# Base.show, ITensors.prime, Base.isapprox are already defined in T4APartitionedMPSs
+# Base.show, ITensors.prime, Base.isapprox are already defined in T4APartitionedTT
 # We can add type aliases for backward compatibility if needed
 
-function ITensors.prime(Ψ::PartitionedMPS, args...; kwargs...)
-    return T4APartitionedMPSs.prime(Ψ, args...; kwargs...)
+function ITensors.prime(Ψ::PartitionedTT, args...; kwargs...)
+    return T4APartitionedTT.prime(Ψ, args...; kwargs...)
 end
 
-# Base.isapprox for SubDomainMPS is already defined in T4APartitionedMPSs
+# Base.isapprox for SubDomainTT is already defined in T4APartitionedTT
 
-# Make PartitionedMPS work as ProjectableEvaluator for evaluation
-# Support both MultiIndex (Vector{Int}) and MMultiIndex (Vector{Vector{Int}})
-function (obj::PartitionedMPS)(multiidx::MultiIndex)
-    # Convert MultiIndex to MMultiIndex
-    sitedims_ = sitedims(obj)
-    mmultiidx = multii(sitedims_, multiidx)
-    return obj(mmultiidx)
-end
-
-function (obj::PartitionedMPS)(mmultiidx::MMultiIndex)
-    # Sum over all SubDomainMPS in the PartitionedMPS
-    # Each SubDomainMPS corresponds to a different projector
+# Make PartitionedTT work as ProjectableEvaluator for evaluation
+# MultiIndex (Vector{Int}) support is already defined in T4APartitionedTT
+# We only need to add MMultiIndex (Vector{Vector{Int}}) support
+function (obj::PartitionedTT)(mmultiidx::MMultiIndex)
+    # Sum over all SubDomainTT in the PartitionedTT
+    # Each SubDomainTT corresponds to a different projector
     if isempty(obj.data)
-        error("Cannot evaluate empty PartitionedMPS")
+        error("Cannot evaluate empty PartitionedTT")
     end
-    # Get element type from first tensor in first SubDomainMPS
+    # Get element type from first tensor in first SubDomainTT
     first_subdmps = first(values(obj.data))
     first_tensor = first(first_subdmps.data)
     # Get element type from ITensor's storage
     T = eltype(ITensors.storage(first_tensor))
     result = zero(T)
     for subdmps in values(obj.data)
-        # Convert SubDomainMPS to ProjTensorTrain for evaluation
+        # Convert SubDomainTT to ProjTensorTrain for evaluation
         # ProjTensorTrain{T}(subdmps) already gets sites from siteinds(subdmps)
         ptt = ProjTensorTrain{T}(subdmps)
         result += ptt(mmultiidx)
@@ -253,14 +247,14 @@ function (obj::PartitionedMPS)(mmultiidx::MMultiIndex)
     return result
 end
 
-# Add fulltensor method for PartitionedMPS
-function fulltensor(obj::PartitionedMPS; fused::Bool=false)
-    # Sum over all SubDomainMPS in the PartitionedMPS
+# Add fulltensor method for PartitionedTT
+function fulltensor(obj::PartitionedTT; fused::Bool=false)
+    # Sum over all SubDomainTT in the PartitionedTT
     if isempty(obj.data)
-        error("Cannot compute fulltensor for empty PartitionedMPS")
+        error("Cannot compute fulltensor for empty PartitionedTT")
     end
     result = nothing
-    # Get element type from first tensor in first SubDomainMPS
+    # Get element type from first tensor in first SubDomainTT
     first_subdmps = first(values(obj.data))
     first_tensor = first(first_subdmps.data)
     # Get element type from ITensor's storage
@@ -276,12 +270,12 @@ function fulltensor(obj::PartitionedMPS; fused::Bool=false)
     return result
 end
 
-# Add sitedims property access for PartitionedMPS (needed for ProjectableEvaluator compatibility)
-function sitedims(obj::PartitionedMPS)
+# Add sitedims property access for PartitionedTT (needed for ProjectableEvaluator compatibility)
+function sitedims(obj::PartitionedTT)
     if isempty(obj.data)
-        error("Cannot get sitedims for empty PartitionedMPS")
+        error("Cannot get sitedims for empty PartitionedTT")
     end
-    # Get sitedims from first SubDomainMPS
+    # Get sitedims from first SubDomainTT
     first_subdmps = first(values(obj.data))
     sites = siteinds(first_subdmps)
     return [collect(dim.(s)) for s in sites]

@@ -2,7 +2,7 @@ using Test
 import T4ATensorCI as TCI
 import T4AAdaptivePatchedTCI as TCIA
 using T4AQuantics
-import T4APartitionedMPSs: siteinds, SubDomainMPS, project as project_subdmps
+import T4APartitionedTT: siteinds, SubDomainTT, project as project_subdmps
 import T4AITensorCompat: MPS
 
 import T4AAdaptivePatchedTCI: Projector, project, ProjTensorTrain, makeprojectable
@@ -12,13 +12,13 @@ using ITensors
 # _util.jl is already included in runtests.jl
 
 @testset "itensor" begin
-    @testset "SubDomainMPS" begin
+    @testset "SubDomainTT" begin
         N = 3
         sitesx = [Index(2, "x=$n") for n in 1:N]
         sitesy = [Index(2, "y=$n") for n in 1:N]
         sites = collect(collect.(zip(sitesx, sitesy)))
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
-        prjΨ = SubDomainMPS(Ψ)
+        prjΨ = SubDomainTT(Ψ)
 
         prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
         prjΨ2 = project_subdmps(prjΨ, Dict(sitesx[1] => 2))
@@ -35,13 +35,13 @@ using ITensors
         sites = collect(collect.(zip(sitesx, sitesy)))
         sitedims = [dim.(s) for s in sites]
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
-        prjΨ = SubDomainMPS(Ψ)
+        prjΨ = SubDomainTT(Ψ)
         prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
 
         prjtt1 = TCIA.ProjTensorTrain{Float64}(prjΨ1)
         @test prjtt1.projector == Projector([[1, 0], [0, 0]], sitedims)
 
-        prjΨ1_reconst = SubDomainMPS(Float64, prjtt1, sites)
+        prjΨ1_reconst = SubDomainTT(Float64, prjtt1, sites)
 
         @test prjΨ1 ≈ prjΨ1_reconst
     end
@@ -55,7 +55,7 @@ using ITensors
 
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
 
-        prjΨ = SubDomainMPS(Ψ)
+        prjΨ = SubDomainTT(Ψ)
         prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
 
         sitesxy = collect(collect.(zip(sitesx, sitesy)))
@@ -82,7 +82,7 @@ using ITensors
 
         Ψ = _random_mpo(sites)  # MPO is TensorTrain, MPS is also TensorTrain
 
-        prjΨ = SubDomainMPS(Ψ)
+        prjΨ = SubDomainTT(Ψ)
         prjΨ1 = project_subdmps(prjΨ, Dict(sitesx[1] => 1))
 
         prjΨ1_diagonalz = T4AQuantics.makesitediagonal(prjΨ1, "y")
