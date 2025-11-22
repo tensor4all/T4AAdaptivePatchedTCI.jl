@@ -12,7 +12,6 @@ QuanticsGrids = "634c7f73-3e90-4749-a1bd-001b8efc642d"
 T4APartitionedTT = "7ada5264-53d5-494a-9572-4199565888e0"
 T4AQuantics = "99202d80-6772-4c79-995b-f2660cf2bd6d"
 T4ATensorCI = "14428447-6903-48c7-83df-f2cb08af9918"
-TensorCrossInterpolation = "b261b2ec-6378-4871-b32e-9173bb050604"
 
 [weakdeps]
 ITensors = "9136182c-28ba-11e9-034c-db9fb085ebd5"
