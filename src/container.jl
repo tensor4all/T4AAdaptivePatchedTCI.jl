@@ -128,7 +128,10 @@ function Base.show(io::IO, obj::ProjContainer{T,ProjTensorTrain{T}}) where {T}
     # TCI is imported as T4ATensorCI in the module
     maxbonddims = [maximum(TCI.linkdims(ptt.data)) for ptt in obj.data]
     maxbonddim = maximum(maxbonddims)
-    return print(io, "ProjTTContainer{$T} with $npatches patch$(npatches == 1 ? "" : "es"), max bond dimension: $maxbonddim")
+    return print(
+        io,
+        "ProjTTContainer{$T} with $npatches patch$(npatches == 1 ? "" : "es"), max bond dimension: $maxbonddim",
+    )
 end
 
 function fulltensor(obj::ProjContainer{T})::Array{T} where {T}
