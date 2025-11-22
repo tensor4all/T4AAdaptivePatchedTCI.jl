@@ -2,8 +2,8 @@ module T4AAdaptivePatchedTCI
 
 import T4ATensorCI as TCI
 import T4ATensorCI: TensorTrain, evaluate, TTCache, MultiIndex, LocalIndex, TensorCI2
-import T4APartitionedMPSs: SubDomainMPS, PartitionedMPS, Projector as PartitionedProjector
-using T4APartitionedMPSs: T4APartitionedMPSs
+import T4APartitionedTT: SubDomainTT, PartitionedTT, Projector as PartitionedProjector
+using T4APartitionedTT: T4APartitionedTT
 
 using T4AQuantics
 
