@@ -5,8 +5,6 @@ import T4ATensorCI: TensorTrain, evaluate, TTCache, MultiIndex, LocalIndex, Tens
 import T4APartitionedTT: SubDomainTT, PartitionedTT, Projector as PartitionedProjector
 using T4APartitionedTT: T4APartitionedTT
 
-using T4AQuantics
-
 using OrderedCollections: OrderedDict, OrderedSet
 using Distributed
 using EllipsisNotation
