@@ -26,7 +26,7 @@ QuanticsGrids = "0.6.0"
 T4AITensorCompat = "0.8"
 T4APartitionedTT = "0.8"
 T4AQuantics = "0.6"
-T4ATensorCI = "0.10"
+T4ATensorCI = "0.12"
 julia = "1.10"
 
 [extras]
