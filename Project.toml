@@ -20,6 +20,7 @@ T4AAdaptivePatchedTCIITensorExt = ["ITensors", "T4AITensorCompat", "T4APartition
 
 [compat]
 EllipsisNotation = "1"
+ITensors = "0.9"
 OrderedCollections = "1"
 T4AITensorCompat = "0.8"
 T4APartitionedTT = "0.8"
