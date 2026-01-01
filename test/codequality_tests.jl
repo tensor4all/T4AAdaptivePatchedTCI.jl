@@ -4,7 +4,7 @@ using JET
 using T4AAdaptivePatchedTCI
 
 @testset "Aqua.jl" begin
-    Aqua.test_all(T4AAdaptivePatchedTCI; deps_compat=false)
+    Aqua.test_all(T4AAdaptivePatchedTCI; deps_compat=false, stale_deps=false)
 end
 
 #=
