@@ -13,7 +13,14 @@ if nworkers() < MAX_WORKERS
     addprocs(max(0, MAX_WORKERS - nworkers()))
 end
 
-#include("codequality_tests.jl")
+# Run Aqua and JET tests when not explicitly skipped
+if !haskey(ENV, "SKIP_AQUA_JET")
+    using Pkg
+    Pkg.add("Aqua")
+    Pkg.add("JET")
+    include("codequality_tests.jl")
+end
+
 include("_test_util.jl")
 
 include("util_tests.jl")

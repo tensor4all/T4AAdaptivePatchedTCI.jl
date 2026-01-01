@@ -1,6 +1,6 @@
 name = "T4AAdaptivePatchedTCI"
 uuid = "36ff05ac-192f-4444-92c7-2a2992a7023b"
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors"]
 
 [deps]
@@ -8,7 +8,6 @@ Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 EllipsisNotation = "da5c29d0-fa7d-589e-88eb-ea29b0a81949"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
-QuanticsGrids = "634c7f73-3e90-4749-a1bd-001b8efc642d"
 T4ATensorCI = "14428447-6903-48c7-83df-f2cb08af9918"
 
 [weakdeps]
@@ -23,11 +22,10 @@ T4AAdaptivePatchedTCIITensorExt = ["ITensors", "T4AITensorCompat", "T4APartition
 EllipsisNotation = "1"
 ITensors = "0.9"
 OrderedCollections = "1"
-QuanticsGrids = "0.6.0"
 T4AITensorCompat = "0.8"
 T4APartitionedTT = "0.8"
 T4AQuantics = "0.6"
-T4ATensorCI = "0.10"
+T4ATensorCI = "0.12"
 julia = "1.10"
 
 [extras]
@@ -35,6 +33,7 @@ Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 HubbardAtoms = "4f3da25b-ea28-4d4f-a81f-380d3f5e56a6"
 ITensors = "9136182c-28ba-11e9-034c-db9fb085ebd5"
 JET = "c3a54625-cd67-489e-a8e7-0a5a0ff4e31b"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 QuanticsGrids = "634c7f73-3e90-4749-a1bd-001b8efc642d"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 SparseIR = "4fe2279e-80f0-4adb-8463-ee114ff56b7d"
@@ -44,4 +43,4 @@ T4AQuantics = "99202d80-6772-4c79-995b-f2660cf2bd6d"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Aqua", "JET", "Test", "Random", "QuanticsGrids", "SparseIR", "HubbardAtoms", "T4AITensorCompat", "ITensors", "T4APartitionedTT", "T4AQuantics"]
+test = ["Test", "Random", "QuanticsGrids", "SparseIR", "HubbardAtoms", "T4AITensorCompat", "ITensors", "T4APartitionedTT", "T4AQuantics", "Pkg"]
